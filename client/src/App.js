@@ -1,5 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
+import Cart from './pages/Cart';
 
 import Home from './pages/Home'
 import Product from './pages/Product';
@@ -20,6 +21,7 @@ function App() {
         <main>
             <Route path="/" component={Home} exact />
             <Route path="/product/:id" component={Product} exact />
+            <Route path="/cart/:id?" component={Cart} exact />
         </main>
         <footer className="row center">
             All right reseve
