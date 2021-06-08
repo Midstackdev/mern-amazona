@@ -8,7 +8,7 @@ const data = {
             price: 120,
             brand: 'Marks and Spenser',
             rating: 4.5,
-            numReviews: 10,
+            numReviews: 12,
             description: 'Nice pants for the office'
         },
         {
@@ -41,7 +41,7 @@ const data = {
             price: 150,
             brand: 'Marks and Spenser',
             rating: 3.5,
-            numReviews: 10,
+            numReviews: 34,
             description: 'Nice pants for the office'
         },
         {
@@ -62,7 +62,7 @@ const data = {
             image: '/images/p6.JPG',
             price: 120,
             brand: 'Marks and Spenser',
-            rating: 4.5,
+            rating: 2.5,
             numReviews: 10,
             description: 'Nice pants for the office'
         },
