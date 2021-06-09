@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addToCart } from '../actions/cartAction'
+import { addToCart, removeFromCart } from '../actions/cartAction'
 import { Link } from 'react-router-dom'
 import MessageBox from '../components/MessageBox'
 
@@ -18,7 +18,7 @@ export default function Cart(props) {
     }, [dispatch, productId, qty])
 
     const handleRemoveFromCart = (productId) => {
-
+        dispatch(removeFromCart(productId))
     }
     
     const handleCheckout = () => {
