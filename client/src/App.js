@@ -1,14 +1,23 @@
 import React from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom'
+import { signOut } from './actions/userActions';
 import Cart from './pages/Cart';
 
 import Home from './pages/Home'
 import Product from './pages/Product';
+import SignIn from './pages/SignIn';
 
 function App() {
   const cart = useSelector(state => state.cart)
   const { cartItems } = cart
+  const user = useSelector(state => state.user)
+  const { userInfo } = user
+  const dispatch = useDispatch()
+
+  const handleSignOut = () => {
+      dispatch(signOut())
+  }
 
   return (
     <Router>
@@ -24,13 +33,25 @@ function App() {
                         <span className="badge">{cartItems.length}</span>
                     )}
                 </Link>
-                <Link to="/signin">Sign in</Link>
+                {userInfo ? (
+                    <div className="dropdown">
+                        <Link to="#">{
+                            userInfo.name} <i className="fa fa-caret-down"></i>
+                        </Link>
+                        <ul className="dropdown-content">
+                            <Link to="#signout" onClick={handleSignOut}>Sign out</Link>
+                        </ul>
+                    </div>
+                ) : (   
+                  <Link to="/signin">Sign in</Link>
+                )}
             </div>
         </header>
         <main>
             <Route path="/" component={Home} exact />
             <Route path="/product/:id" component={Product} exact />
             <Route path="/cart/:id?" component={Cart} exact />
+            <Route path="/signin" component={SignIn} exact />
         </main>
         <footer className="row center">
             All right reseve
