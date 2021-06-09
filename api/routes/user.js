@@ -4,6 +4,6 @@ import * as controller from '../controllers/user.js'
 
 const router = express.Router()
 
-router.get('/seed', expressAsyncHandler(controller.createUser))
+router.get('/seed', expressAsyncHandler(controller.createUsers))
 
 export default router
