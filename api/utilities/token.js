@@ -10,3 +10,12 @@ export const generateToken = (user) => {
         expiresIn: '30d'
     })
 }
+
+export const decodeToken = (token) => {
+    
+    try {
+        return jwt.verify(token, process.env.JWT_SECRET || 'somesuperlongsecret')
+    } catch (error) {
+        return null
+    }
+}
