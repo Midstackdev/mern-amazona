@@ -7,6 +7,7 @@ import Cart from './pages/Cart';
 import Home from './pages/Home'
 import Product from './pages/Product';
 import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
 
 function App() {
   const cart = useSelector(state => state.cart)
@@ -52,6 +53,7 @@ function App() {
             <Route path="/product/:id" component={Product} exact />
             <Route path="/cart/:id?" component={Cart} exact />
             <Route path="/signin" component={SignIn} exact />
+            <Route path="/signup" component={SignUp} exact />
         </main>
         <footer className="row center">
             All right reseve

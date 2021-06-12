@@ -29,5 +29,22 @@ export const login = async (req, res) => {
 }
 
 export const register = async (req, res) => {
-
+    const userExists = await User.findOne({ email: req.body.email })
+    if(!userExists) {
+        const user = new User ({
+            name: req.body.name,
+            email: req.body.email,
+            password: bcrypt.hashSync(req.body.password, 8)
+        })
+        const createdUser = await user.save()
+        res.send({
+            _id: createdUser._id,
+            name: createdUser.name,
+            email: createdUser.email,
+            isAdmin: createdUser.isAdmin,
+            token: generateToken(createdUser)
+        })
+         
+    }
+    res.status(401).send({ message: 'User already exists.'})
 }
