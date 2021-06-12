@@ -19,3 +19,12 @@ export const create = async (req, res) => {
         res.status(201).send({ message: 'New order created', order: createOrder})
     }
 }
+
+export const show = async (req, res) => {
+    const order = await Order.findById(req.params.id)
+    if(order) {
+        return res.status(200).send(order)
+    }else {
+        return res.status(404).send({ message: 'Order Not Found'})
+    }
+}

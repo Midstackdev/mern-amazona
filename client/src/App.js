@@ -5,6 +5,7 @@ import { signOut } from './actions/userActions';
 import Cart from './pages/Cart';
 
 import Home from './pages/Home'
+import Order from './pages/Order';
 import PaymentMethod from './pages/PaymentMethod';
 import PlaceOrder from './pages/PlaceOrder';
 import Product from './pages/Product';
@@ -60,6 +61,7 @@ function App() {
             <Route path="/shipping" render={(props) => !userInfo ? <Redirect to="/signin" /> : <ShippingAddress {...props} />} exact />
             <Route path="/payment" render={(props) => !userInfo ? <Redirect to="/signin" /> : <PaymentMethod {...props} />} exact />
             <Route path="/place-order" render={(props) => !userInfo ? <Redirect to="/signin" /> : <PlaceOrder {...props} />} exact />
+            <Route path="/order/:id" render={(props) => !userInfo ? <Redirect to="/signin" /> : <Order {...props} />} exact />
         </main>
         <footer className="row center">
             All right reseve
