@@ -16,7 +16,6 @@ export default function ShippingAddress(props) {
     const handleSubmit = (e) => {
         e.preventDefault()
         dispatch(saveShippingAddress({ fullName, address, city, postalCode, country }))
-        console.log(props)
         props.history.push('/payment')
     }
 

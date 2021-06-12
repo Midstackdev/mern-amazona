@@ -5,6 +5,7 @@ import { signOut } from './actions/userActions';
 import Cart from './pages/Cart';
 
 import Home from './pages/Home'
+import PaymentMethod from './pages/PaymentMethod';
 import Product from './pages/Product';
 import ShippingAddress from './pages/ShippingAddress';
 import SignIn from './pages/SignIn';
@@ -56,6 +57,7 @@ function App() {
             <Route path="/signin" component={SignIn} exact />
             <Route path="/signup" component={SignUp} exact />
             <Route path="/shipping" render={(props) => !userInfo ? <Redirect to="/signin" /> : <ShippingAddress {...props} />} exact />
+            <Route path="/payment" render={(props) => !userInfo ? <Redirect to="/signin" /> : <PaymentMethod {...props} />} exact />
         </main>
         <footer className="row center">
             All right reseve
