@@ -1,11 +1,12 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { BrowserRouter as Router, Link, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Link, Redirect, Route } from 'react-router-dom'
 import { signOut } from './actions/userActions';
 import Cart from './pages/Cart';
 
 import Home from './pages/Home'
 import Product from './pages/Product';
+import ShippingAddress from './pages/ShippingAddress';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 
@@ -54,6 +55,7 @@ function App() {
             <Route path="/cart/:id?" component={Cart} exact />
             <Route path="/signin" component={SignIn} exact />
             <Route path="/signup" component={SignUp} exact />
+            <Route path="/shipping" render={(props) => !userInfo ? <Redirect to="/signin" /> : <ShippingAddress {...props} />} exact />
         </main>
         <footer className="row center">
             All right reseve
