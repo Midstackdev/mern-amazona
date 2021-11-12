@@ -1,13 +1,18 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import dropin from 'braintree-web-drop-in'
 import { getOrder } from '../actions/orderActions'
 import LoadingBox from '../components/LoadingBox'
 import MessageBox from '../components/MessageBox'
+import { getClientPaymentToken } from '../actions/paymentAction'
 
 
 export default function Order(props) {
-    
+    const [clientToken, setClientToken] = useState(null)
+    const [showBraintreeDropIn, setShowBraintreeDropIn] = useState(false)
+    const [braintreeInstance, setBraintreeInstance] = useState(undefined)
+
     const orderId = props.match.params.id
     const dispatch = useDispatch()
 
@@ -17,6 +22,65 @@ export default function Order(props) {
     useEffect(() => {
         dispatch(getOrder(orderId))
     }, [orderId, dispatch])
+
+    useEffect(() => {
+        getClientPaymentToken()
+            .then(data => {
+                setClientToken(data)
+                setShowBraintreeDropIn(true)
+                
+                if (showBraintreeDropIn) {
+                    const initializeBraintree = () => dropin.create({
+                        authorization: clientToken, // insert your tokenization key or client token here
+                        container: '#braintree-drop-in-div',
+                        // paypal: {
+                        //     flow: 'checkout'
+                        // }
+                    }, function (error, instance) {
+                        if (error)
+                            console.error(error)
+                        else
+                            setBraintreeInstance(instance);
+                    });
+        
+                    if (braintreeInstance) {
+                        braintreeInstance
+                            .teardown()
+                            .then(() => {
+                                initializeBraintree();
+                            });
+                    } else {
+                        initializeBraintree();
+                    }
+                }
+            })
+
+    }, [showBraintreeDropIn])
+
+    const pay = () => {
+        if (braintreeInstance) {
+            braintreeInstance.requestPaymentMethod(
+                (error, payload) => {
+                    if (error) {
+                        console.error(error);
+                    } else {
+                        const paymentMethodNonce = payload.nonce;
+                        console.log("payment method nonce", payload.nonce);
+
+                        // TODO: use the paymentMethodNonce to
+                        //  call you server and complete the payment here
+
+                        // ...
+
+                        alert(`Payment completed with nonce=${paymentMethodNonce}`);
+
+                        // onPaymentCompleted();
+                    }
+                });
+        }
+    }
+
+    console.log(braintreeInstance)
 
     return loading ? (<LoadingBox></LoadingBox>) : 
         error ? (<MessageBox variant="danger">{error}</MessageBox>) :
@@ -107,6 +171,31 @@ export default function Order(props) {
                                     <div><strong>${order.totalPrice.toFixed(2)}</strong></div>
                                 </div>
                             </li>
+                            {
+                                !order.isPaid && (
+                                    <li>
+                                        {
+                                            !setShowBraintreeDropIn ? (<LoadingBox></LoadingBox>) :
+                                            (
+                                            <>
+                                                <div
+                                                    id={"braintree-drop-in-div"}
+                                                />
+
+                                                <button
+                                                    className="primary block"
+                                                    type="button"
+                                                    disabled={!braintreeInstance}
+                                                    onClick={pay}
+                                                >
+                                                Pay
+                                                </button>
+                                            </>
+                                            )
+                                        }
+                                    </li>
+                                )
+                            }
                         </ul>
                     </div>
                 </div>
