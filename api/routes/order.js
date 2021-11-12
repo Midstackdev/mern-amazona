@@ -7,5 +7,6 @@ const router = express.Router()
 
 router.post('/', isAuth, expressAsyncHandler(controller.create))
 router.get('/:id', isAuth, expressAsyncHandler(controller.show))
+router.put('/:id', isAuth, expressAsyncHandler(controller.update))
 
 export default router

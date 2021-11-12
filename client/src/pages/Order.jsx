@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import dropin from 'braintree-web-drop-in'
-import { getOrder } from '../actions/orderActions'
+import { getOrder, payOrder } from '../actions/orderActions'
 import LoadingBox from '../components/LoadingBox'
 import MessageBox from '../components/MessageBox'
-import { getClientPaymentToken } from '../actions/paymentAction'
+import { getClientPaymentToken, processPayment } from '../actions/paymentAction'
+import { ORDER_PAY_RESET } from '../constants/orderConstansts'
 
 
 export default function Order(props) {
@@ -18,10 +19,16 @@ export default function Order(props) {
 
     const orderDetails = useSelector(state => state.orderDetails)
     const { error, loading, order } = orderDetails
+    
+    const orderPay = useSelector(state => state.orderPay)
+    const { loading: loadingPay, error: errorPay, sucees: successPay } = orderPay
 
     useEffect(() => {
-        dispatch(getOrder(orderId))
-    }, [orderId, dispatch])
+        if(!order || successPay || (order && order._id !== orderId )) {
+            dispatch({ type: ORDER_PAY_RESET })
+            dispatch(getOrder(orderId))
+        }
+    }, [orderId, dispatch, order, successPay])
 
     useEffect(() => {
         getClientPaymentToken()
@@ -65,14 +72,23 @@ export default function Order(props) {
                         console.error(error);
                     } else {
                         const paymentMethodNonce = payload.nonce;
-                        console.log("payment method nonce", payload.nonce);
+                        // console.log("payment method nonce", payload.nonce);
 
                         // TODO: use the paymentMethodNonce to
                         //  call you server and complete the payment here
 
-                        // ...
+                        processPayment({ paymentMethodNonce, amount: order.totalPrice.toFixed(2) })
+                            .then(data => {
+                                console.log(data)
+                                const formData = {
+                                    transactionId: data.transaction.id,
+                                    status: data.transaction.status,
+                                    updatedAt: data.transaction.updatedAt,
+                                }
+                                dispatch(payOrder(order, formData))
+                            })
 
-                        alert(`Payment completed with nonce=${paymentMethodNonce}`);
+                        // alert(`Payment completed with nonce=${paymentMethodNonce}`);
 
                         // onPaymentCompleted();
                     }
@@ -80,7 +96,7 @@ export default function Order(props) {
         }
     }
 
-    console.log(braintreeInstance)
+    // console.log(braintreeInstance)
 
     return loading ? (<LoadingBox></LoadingBox>) : 
         error ? (<MessageBox variant="danger">{error}</MessageBox>) :
@@ -112,7 +128,7 @@ export default function Order(props) {
                                     <strong>Method:</strong> {order.paymentMethod}
                                 </p>
                                 {order.isPaid ? 
-                                (<MessageBox variant="success">Paid</MessageBox>) : 
+                                (<MessageBox variant="success">Paid at {order.paidAt}</MessageBox>) : 
                                 (<MessageBox variant="danger">Not Paid</MessageBox>)}
                             </div>
                         </li>
@@ -181,7 +197,9 @@ export default function Order(props) {
                                                 <div
                                                     id={"braintree-drop-in-div"}
                                                 />
-
+                                                <>
+                                                {errorPay && <MessageBox variant="danger">{errorPay}</MessageBox>}
+                                                {loadingPay && <LoadingBox />}
                                                 <button
                                                     className="primary block"
                                                     type="button"
@@ -190,6 +208,7 @@ export default function Order(props) {
                                                 >
                                                 Pay
                                                 </button>
+                                                </>
                                             </>
                                             )
                                         }

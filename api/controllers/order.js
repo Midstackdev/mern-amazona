@@ -28,3 +28,20 @@ export const show = async (req, res) => {
         return res.status(404).send({ message: 'Order Not Found'})
     }
 }
+
+export const update = async (req, res) => {
+    const order = await Order.findById(req.params.id)
+    if(order) {
+        order.isPaid = true
+        order.paidAt = Date.now()
+        order.paymentResult = {
+            transactionId: req.body.transactionId,
+            status: req.body.status,
+            updatedAt: req.body.updatedAt,
+        }
+        const updatedOrder = await order.save()
+        return res.status(200).send({ message: 'Order Paid', order: updatedOrder})
+    }else {
+        return res.status(404).send({ message: 'Order Not Found'})
+    }
+}
