@@ -6,6 +6,7 @@ import { isAuth } from '../middlewares/auth.js'
 const router = express.Router()
 
 router.post('/', isAuth, expressAsyncHandler(controller.create))
+router.get('/user', isAuth, expressAsyncHandler(controller.index))
 router.get('/:id', isAuth, expressAsyncHandler(controller.show))
 router.put('/:id', isAuth, expressAsyncHandler(controller.update))
 

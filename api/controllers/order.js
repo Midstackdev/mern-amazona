@@ -20,6 +20,15 @@ export const create = async (req, res) => {
     }
 }
 
+export const index = async (req, res) => {
+    const orders = await Order.find({ user: req.user._id})
+    if(orders) {
+        return res.status(200).send(orders)
+    }else {
+        return res.status(404).send({ message: 'Order Not Found'})
+    }
+}
+
 export const show = async (req, res) => {
     const order = await Order.findById(req.params.id)
     if(order) {

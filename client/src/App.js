@@ -6,6 +6,7 @@ import Cart from './pages/Cart';
 
 import Home from './pages/Home'
 import Order from './pages/Order';
+import OrderHistory from './pages/OrderHistory';
 import PaymentMethod from './pages/PaymentMethod';
 import PlaceOrder from './pages/PlaceOrder';
 import Product from './pages/Product';
@@ -44,7 +45,12 @@ function App() {
                             userInfo.name} <i className="fa fa-caret-down"></i>
                         </Link>
                         <ul className="dropdown-content">
-                            <Link to="#signout" onClick={handleSignOut}>Sign out</Link>
+                            <li>
+                                <Link to="/orders/history">Order history</Link>
+                            </li>
+                            <li>
+                                <Link to="#signout" onClick={handleSignOut}>Sign out</Link>
+                            </li>
                         </ul>
                     </div>
                 ) : (   
@@ -62,6 +68,7 @@ function App() {
             <Route path="/payment" render={(props) => !userInfo ? <Redirect to="/signin" /> : <PaymentMethod {...props} />} exact />
             <Route path="/place-order" render={(props) => !userInfo ? <Redirect to="/signin" /> : <PlaceOrder {...props} />} exact />
             <Route path="/order/:id" render={(props) => !userInfo ? <Redirect to="/signin" /> : <Order {...props} />} exact />
+            <Route path="/orders/history" render={(props) => !userInfo ? <Redirect to="/signin" /> : <OrderHistory {...props} />} exact />
         </main>
         <footer className="row center">
             All right reseve
