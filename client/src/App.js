@@ -10,6 +10,7 @@ import OrderHistory from './pages/OrderHistory';
 import PaymentMethod from './pages/PaymentMethod';
 import PlaceOrder from './pages/PlaceOrder';
 import Product from './pages/Product';
+import Profile from './pages/Profile';
 import ShippingAddress from './pages/ShippingAddress';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
@@ -46,6 +47,9 @@ function App() {
                         </Link>
                         <ul className="dropdown-content">
                             <li>
+                                <Link to="/profile">User profile</Link>
+                            </li>
+                            <li>
                                 <Link to="/orders/history">Order history</Link>
                             </li>
                             <li>
@@ -69,6 +73,7 @@ function App() {
             <Route path="/place-order" render={(props) => !userInfo ? <Redirect to="/signin" /> : <PlaceOrder {...props} />} exact />
             <Route path="/order/:id" render={(props) => !userInfo ? <Redirect to="/signin" /> : <Order {...props} />} exact />
             <Route path="/orders/history" render={(props) => !userInfo ? <Redirect to="/signin" /> : <OrderHistory {...props} />} exact />
+            <Route path="/profile" render={(props) => !userInfo ? <Redirect to="/signin" /> : <Profile {...props} />} exact />
         </main>
         <footer className="row center">
             All right reseve

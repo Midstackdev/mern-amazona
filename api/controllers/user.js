@@ -48,3 +48,11 @@ export const register = async (req, res) => {
     }
     res.status(401).send({ message: 'User already exists.'})
 }
+
+export const show = async (req, res) => {
+    const user = await User.findById(req.params.id)
+    if(user) {
+        return res.status(200).send(user)  
+    }
+    return res.status(404).send({ message: 'User not found.'})
+}

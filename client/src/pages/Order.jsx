@@ -31,38 +31,40 @@ export default function Order(props) {
     }, [orderId, dispatch, order, successPay])
 
     useEffect(() => {
-        getClientPaymentToken()
-            .then(data => {
-                setClientToken(data)
-                setShowBraintreeDropIn(true)
-                
-                if (showBraintreeDropIn) {
-                    const initializeBraintree = () => dropin.create({
-                        authorization: clientToken, // insert your tokenization key or client token here
-                        container: '#braintree-drop-in-div',
-                        // paypal: {
-                        //     flow: 'checkout'
-                        // }
-                    }, function (error, instance) {
-                        if (error)
-                            console.error(error)
-                        else
-                            setBraintreeInstance(instance);
-                    });
-        
-                    if (braintreeInstance) {
-                        braintreeInstance
-                            .teardown()
-                            .then(() => {
-                                initializeBraintree();
-                            });
-                    } else {
-                        initializeBraintree();
+        if(order && !order.isPaid) {
+            getClientPaymentToken()
+                .then(data => {
+                    setClientToken(data)
+                    setShowBraintreeDropIn(true)
+                    
+                    if (showBraintreeDropIn) {
+                        const initializeBraintree = () => dropin.create({
+                            authorization: clientToken, // insert your tokenization key or client token here
+                            container: '#braintree-drop-in-div',
+                            // paypal: {
+                            //     flow: 'checkout'
+                            // }
+                        }, function (error, instance) {
+                            if (error)
+                                console.error(error)
+                            else
+                                setBraintreeInstance(instance);
+                        });
+            
+                        if (braintreeInstance) {
+                            braintreeInstance
+                                .teardown()
+                                .then(() => {
+                                    initializeBraintree();
+                                });
+                        } else {
+                            initializeBraintree();
+                        }
                     }
-                }
-            })
+                })
+        }
 
-    }, [showBraintreeDropIn])
+    }, [showBraintreeDropIn, order])
 
     const pay = () => {
         if (braintreeInstance) {
@@ -79,7 +81,7 @@ export default function Order(props) {
 
                         processPayment({ paymentMethodNonce, amount: order.totalPrice.toFixed(2) })
                             .then(data => {
-                                console.log(data)
+                                // console.log(data)
                                 const formData = {
                                     transactionId: data.transaction.id,
                                     status: data.transaction.status,
