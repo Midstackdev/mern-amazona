@@ -2,6 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, Link, Redirect, Route } from 'react-router-dom'
 import { signOut } from './actions/userActions';
+import AdminRoute from './components/AdminRoute';
 import PrivateRoute from './components/PrivateRoute';
 import Cart from './pages/Cart';
 
@@ -11,6 +12,7 @@ import OrderHistory from './pages/OrderHistory';
 import PaymentMethod from './pages/PaymentMethod';
 import PlaceOrder from './pages/PlaceOrder';
 import Product from './pages/Product';
+import Products from './pages/Products';
 import Profile from './pages/Profile';
 import ShippingAddress from './pages/ShippingAddress';
 import SignIn from './pages/SignIn';
@@ -61,6 +63,27 @@ function App() {
                 ) : (   
                   <Link to="/signin">Sign in</Link>
                 )}
+                {userInfo && userInfo.isAdmin && (
+                    <div className="dropdown">
+                        <Link to="#admin">
+                            Admin{' '}<i className="fa fa-caret-down"></i>
+                        </Link>
+                        <ul className="dropdown-content">
+                            <li>
+                                <Link to="/dashbaord">Dashboard</Link>
+                            </li>
+                            <li>
+                                <Link to="/products">Products</Link>
+                            </li>
+                            <li>
+                                <Link to="/users">Users</Link>
+                            </li>
+                            <li>
+                                <Link to="/orders">Orders</Link>
+                            </li>
+                        </ul>
+                    </div>
+                )}
             </div>
         </header>
         <main>
@@ -75,6 +98,7 @@ function App() {
             <Route path="/order/:id" render={(props) => !userInfo ? <Redirect to="/signin" /> : <Order {...props} />} exact />
             <Route path="/orders/history" render={(props) => !userInfo ? <Redirect to="/signin" /> : <OrderHistory {...props} />} exact />
             <PrivateRoute path="/profile"  component={Profile} exact />
+            <AdminRoute path="/products"  component={Products} exact />
         </main>
         <footer className="row center">
             All right reseve
