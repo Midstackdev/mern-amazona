@@ -2,6 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, Link, Redirect, Route } from 'react-router-dom'
 import { signOut } from './actions/userActions';
+import PrivateRoute from './components/PrivateRoute';
 import Cart from './pages/Cart';
 
 import Home from './pages/Home'
@@ -73,7 +74,7 @@ function App() {
             <Route path="/place-order" render={(props) => !userInfo ? <Redirect to="/signin" /> : <PlaceOrder {...props} />} exact />
             <Route path="/order/:id" render={(props) => !userInfo ? <Redirect to="/signin" /> : <Order {...props} />} exact />
             <Route path="/orders/history" render={(props) => !userInfo ? <Redirect to="/signin" /> : <OrderHistory {...props} />} exact />
-            <Route path="/profile" render={(props) => !userInfo ? <Redirect to="/signin" /> : <Profile {...props} />} exact />
+            <PrivateRoute path="/profile"  component={Profile} exact />
         </main>
         <footer className="row center">
             All right reseve

@@ -9,5 +9,6 @@ router.get('/seed', expressAsyncHandler(controller.createUsers))
 router.post('/signin', expressAsyncHandler(controller.login))
 router.post('/signup', expressAsyncHandler(controller.register))
 router.get('/:id', isAuth, expressAsyncHandler(controller.show))
+router.put('/:id', isAuth, expressAsyncHandler(controller.update))
 
 export default router

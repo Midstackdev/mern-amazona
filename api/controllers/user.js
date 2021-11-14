@@ -56,3 +56,23 @@ export const show = async (req, res) => {
     }
     return res.status(404).send({ message: 'User not found.'})
 }
+
+export const update = async (req, res) => {
+    const user = await User.findById(req.params.id)
+    if(user) {
+        user.name = req.body.name || user.name
+        user.email = req.body.email || user.email
+        if(req.body.password) {
+            user.password = bcrypt.hashSync(req.body.password, 8)
+        }
+        const updateduser = await user.save()
+        return res.send({
+            _id: updateduser._id,
+            name: updateduser.name,
+            email: updateduser.email,
+            isAdmin: updateduser.isAdmin,
+            token: generateToken(updateduser)
+        })  
+    }
+    return res.status(404).send({ message: 'User not found.'})
+}
