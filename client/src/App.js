@@ -17,6 +17,9 @@ import Profile from './pages/Profile';
 import ShippingAddress from './pages/ShippingAddress';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
+import axios from 'axios';
+
+axios.defaults.baseURL = `${document.location.origin}/api/`;
 
 function App() {
   const cart = useSelector(state => state.cart)

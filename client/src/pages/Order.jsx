@@ -214,6 +214,15 @@ export default function Order(props) {
                                             </>
                                             )
                                         }
+                                        <MessageBox variant="warning">
+                                            <a 
+                                                href = "https://developer.paypal.com/braintree/docs/guides/credit-cards/testing-go-live#valid-card-numbers" 
+                                                target = "_blank" 
+                                                rel = "noopener noreferrer"
+                                            >
+                                                Card details here
+                                            </a>
+                                        </MessageBox>
                                     </li>
                                 )
                             }

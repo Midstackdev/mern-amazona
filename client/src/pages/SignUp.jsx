@@ -30,7 +30,7 @@ export default function SignUp(props) {
         if(userInfo) {
             props.history.push(redirect)
         }
-    }, [userInfo])
+    }, [userInfo, props.history, redirect])
 
     return (
     
